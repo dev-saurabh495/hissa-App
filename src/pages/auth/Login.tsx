@@ -32,6 +32,7 @@ export default function Login() {
       remember: true,
     },
   });
+  const passwordField = register("password");
 
   const password = watch("password");
 
@@ -71,16 +72,15 @@ export default function Login() {
           error={errors.email?.message}
           {...register("email")}
         />
+        
+<PasswordInput
+  name="password"
+  value={password}
+  onChange={passwordField.onChange}
+  onBlur={passwordField.onBlur}
+  error={errors.password?.message}
+/>
 
-        <PasswordInput
-          name="password"
-          value={password}
-          onChange={(event) =>
-            register("password").onChange(event)
-          }
-          onBlur={() => register("password").onBlur()}
-          error={errors.password?.message}
-        />
 
         <div className="form-row">
           <label className="checkbox-label">
