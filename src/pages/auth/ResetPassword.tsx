@@ -19,6 +19,8 @@ import {
 export default function ResetPassword() {
   const navigate = useNavigate();
 
+  
+
   const {
     register,
     handleSubmit,
@@ -29,6 +31,9 @@ export default function ResetPassword() {
   });
 
   const password = watch("password");
+  const passwordField = register("password");
+  const confirmPasswordField =
+  register("confirmPassword");
 
   const onSubmit = async () => {
     await new Promise((resolve) =>
@@ -59,31 +64,23 @@ export default function ResetPassword() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <PasswordInput
-          name="password"
-          value={password}
-          onChange={(event) =>
-            register("password").onChange(event)
-          }
-          onBlur={() => register("password").onBlur()}
-          error={errors.password?.message}
-          placeholder="Create a new password"
-        />
+  name="password"
+  value={password}
+  onChange={passwordField.onChange}
+  onBlur={passwordField.onBlur}
+  error={errors.password?.message}
+/>
 
         <PasswordStrength password={password} />
 
-        <PasswordInput
-          label="Confirm new password"
-          name="confirmPassword"
-          value={watch("confirmPassword")}
-          onChange={(event) =>
-            register("confirmPassword").onChange(event)
-          }
-          onBlur={() =>
-            register("confirmPassword").onBlur()
-          }
-          error={errors.confirmPassword?.message}
-          placeholder="Confirm your new password"
-        />
+       <PasswordInput
+  name="confirmPassword"
+  value={"confirmPassword"}
+  onChange={confirmPasswordField.onChange}
+  onBlur={confirmPasswordField.onBlur}
+  error={errors.confirmPassword?.message}
+  label="Confirm password"
+/>
 
         <button
           type="submit"

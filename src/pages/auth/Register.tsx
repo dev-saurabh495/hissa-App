@@ -27,7 +27,7 @@ export default function Register() {
   const registerUser = useAuthStore(
     (state) => state.register
   );
-const passwordField = register("password");
+
   const {
     register,
     handleSubmit,
@@ -46,7 +46,7 @@ const passwordField = register("password");
   });
 
   const password = watch("password");
-
+const passwordField = register("password");
   const onSubmit = async (data: RegisterSchema) => {
     await new Promise((resolve) =>
       setTimeout(resolve, 700)
