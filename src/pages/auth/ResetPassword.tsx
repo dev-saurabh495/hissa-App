@@ -64,7 +64,7 @@ export default function ResetPassword() {
           onChange={(event) =>
             register("password").onChange(event)
           }
-          onBlur={() => register("password").onBlur()}
+          onBlur={(event) => register("password").onBlur(event)}
           error={errors.password?.message}
           placeholder="Create a new password"
         />
@@ -78,8 +78,8 @@ export default function ResetPassword() {
           onChange={(event) =>
             register("confirmPassword").onChange(event)
           }
-          onBlur={() =>
-            register("confirmPassword").onBlur()
+          onBlur={(event) =>
+            register("confirmPassword").onBlur(event)
           }
           error={errors.confirmPassword?.message}
           placeholder="Confirm your new password"

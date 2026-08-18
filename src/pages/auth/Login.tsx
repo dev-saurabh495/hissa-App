@@ -78,7 +78,7 @@ export default function Login() {
           onChange={(event) =>
             register("password").onChange(event)
           }
-          onBlur={() => register("password").onBlur()}
+          onBlur={(event) => register("password").onBlur(event)}
           error={errors.password?.message}
         />
 
