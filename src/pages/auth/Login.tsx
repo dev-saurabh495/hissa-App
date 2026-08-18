@@ -72,7 +72,6 @@ export default function Login() {
           error={errors.email?.message}
           {...register("email")}
         />
-        
 <PasswordInput
   name="password"
   value={password}

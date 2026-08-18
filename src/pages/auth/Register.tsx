@@ -27,7 +27,7 @@ export default function Register() {
   const registerUser = useAuthStore(
     (state) => state.register
   );
-
+const passwordField = register("password");
   const {
     register,
     handleSubmit,
@@ -110,30 +110,22 @@ export default function Register() {
         />
 
         <PasswordInput
-          name="password"
-          value={password}
-          onChange={(event) =>
-            register("password").onChange(event)
-          }
-          onBlur={() => register("password").onBlur()}
-          error={errors.password?.message}
-        />
+  name="password"
+  value={password}
+  onChange={passwordField.onChange}
+  onBlur={passwordField.onBlur}
+  error={errors.password?.message}
+/>
 
         <PasswordStrength password={password} />
 
-        <PasswordInput
-          label="Confirm password"
-          name="confirmPassword"
-          value={watch("confirmPassword")}
-          onChange={(event) =>
-            register("confirmPassword").onChange(event)
-          }
-          onBlur={() =>
-            register("confirmPassword").onBlur()
-          }
-          error={errors.confirmPassword?.message}
-          placeholder="Re-enter your password"
-        />
+       <PasswordInput
+  name="password"
+  value={password}
+  onChange={passwordField.onChange}
+  onBlur={passwordField.onBlur}
+  error={errors.password?.message}
+/>
 
         <label className="checkbox-label terms-checkbox">
           <input

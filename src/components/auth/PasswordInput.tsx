@@ -4,7 +4,10 @@ import {
   LockKeyhole,
 } from "lucide-react";
 import { useState } from "react";
-import type { ChangeEvent, FocusEvent } from "react";
+import type {
+  ChangeEvent,
+  FocusEvent,
+} from "react";
 
 interface PasswordInputProps {
   label?: string;
@@ -59,7 +62,9 @@ export default function PasswordInput({
           type="button"
           className="password-toggle"
           onClick={() =>
-            setShowPassword((current) => !current)
+            setShowPassword(
+              (current) => !current
+            )
           }
           aria-label={
             showPassword
