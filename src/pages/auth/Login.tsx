@@ -80,6 +80,15 @@ export default function Login() {
   error={errors.password?.message}
 />
 
+        <PasswordInput
+          name="password"
+          value={password}
+          onChange={(event) =>
+            register("password").onChange(event)
+          }
+          onBlur={(event) => register("password").onBlur(event)}
+          error={errors.password?.message}
+        />
 
         <div className="form-row">
           <label className="checkbox-label">

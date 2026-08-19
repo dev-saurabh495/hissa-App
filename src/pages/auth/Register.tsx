@@ -110,22 +110,30 @@ const passwordField = register("password");
         />
 
         <PasswordInput
-  name="password"
-  value={password}
-  onChange={passwordField.onChange}
-  onBlur={passwordField.onBlur}
-  error={errors.password?.message}
-/>
+          name="password"
+          value={password}
+          onChange={(event) =>
+            register("password").onChange(event)
+          }
+          onBlur={(event) => register("password").onBlur(event)}
+          error={errors.password?.message}
+        />
 
         <PasswordStrength password={password} />
 
-       <PasswordInput
-  name="password"
-  value={password}
-  onChange={passwordField.onChange}
-  onBlur={passwordField.onBlur}
-  error={errors.password?.message}
-/>
+        <PasswordInput
+          label="Confirm password"
+          name="confirmPassword"
+          value={watch("confirmPassword")}
+          onChange={(event) =>
+            register("confirmPassword").onChange(event)
+          }
+          onBlur={(event) =>
+            register("confirmPassword").onBlur(event)
+          }
+          error={errors.confirmPassword?.message}
+          placeholder="Re-enter your password"
+        />
 
         <label className="checkbox-label terms-checkbox">
           <input

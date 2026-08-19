@@ -64,23 +64,31 @@ export default function ResetPassword() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <PasswordInput
-  name="password"
-  value={password}
-  onChange={passwordField.onChange}
-  onBlur={passwordField.onBlur}
-  error={errors.password?.message}
-/>
+          name="password"
+          value={password}
+          onChange={(event) =>
+            register("password").onChange(event)
+          }
+          onBlur={(event) => register("password").onBlur(event)}
+          error={errors.password?.message}
+          placeholder="Create a new password"
+        />
 
         <PasswordStrength password={password} />
 
-       <PasswordInput
-  name="confirmPassword"
-  value={"confirmPassword"}
-  onChange={confirmPasswordField.onChange}
-  onBlur={confirmPasswordField.onBlur}
-  error={errors.confirmPassword?.message}
-  label="Confirm password"
-/>
+        <PasswordInput
+          label="Confirm new password"
+          name="confirmPassword"
+          value={watch("confirmPassword")}
+          onChange={(event) =>
+            register("confirmPassword").onChange(event)
+          }
+          onBlur={(event) =>
+            register("confirmPassword").onBlur(event)
+          }
+          error={errors.confirmPassword?.message}
+          placeholder="Confirm your new password"
+        />
 
         <button
           type="submit"
