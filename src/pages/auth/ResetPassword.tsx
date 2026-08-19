@@ -19,6 +19,8 @@ import {
 export default function ResetPassword() {
   const navigate = useNavigate();
 
+  
+
   const {
     register,
     handleSubmit,
@@ -29,6 +31,9 @@ export default function ResetPassword() {
   });
 
   const password = watch("password");
+  const passwordField = register("password");
+  const confirmPasswordField =
+  register("confirmPassword");
 
   const onSubmit = async () => {
     await new Promise((resolve) =>

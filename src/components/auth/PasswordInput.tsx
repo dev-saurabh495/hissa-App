@@ -1,11 +1,22 @@
-import { Eye, EyeOff, LockKeyhole } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  LockKeyhole,
+} from "lucide-react";
 import { useState } from "react";
+import type {
+  ChangeEvent,
+  FocusEvent,
+} from "react";
 
 interface PasswordInputProps {
   label?: string;
   value?: string;
   onChange?: (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>
+  ) => void;
+  onBlur?: (
+    event: FocusEvent<HTMLInputElement>
   ) => void;
   onBlur?: (
     event: React.FocusEvent<HTMLInputElement>
@@ -30,7 +41,11 @@ export default function PasswordInput({
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
 
-      <div className={`input-wrapper ${error ? "input-error" : ""}`}>
+      <div
+        className={`input-wrapper ${
+          error ? "input-error" : ""
+        }`}
+      >
         <span className="input-icon">
           <LockKeyhole size={18} />
         </span>
@@ -39,18 +54,25 @@ export default function PasswordInput({
           id={name}
           name={name}
           type={showPassword ? "text" : "password"}
-          value={value}
+          value={value ?? ""}
           onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}
+          autoComplete="current-password"
         />
 
         <button
           type="button"
           className="password-toggle"
-          onClick={() => setShowPassword((value) => !value)}
+          onClick={() =>
+            setShowPassword(
+              (current) => !current
+            )
+          }
           aria-label={
-            showPassword ? "Hide password" : "Show password"
+            showPassword
+              ? "Hide password"
+              : "Show password"
           }
         >
           {showPassword ? (
@@ -61,7 +83,11 @@ export default function PasswordInput({
         </button>
       </div>
 
-      {error && <p className="field-error">{error}</p>}
+      {error && (
+        <p className="field-error">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
