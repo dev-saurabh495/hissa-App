@@ -45,8 +45,9 @@ export default function Register() {
     },
   });
 
+  const passwordField = register("password");
   const password = watch("password");
-const passwordField = register("password");
+
   const onSubmit = async (data: RegisterSchema) => {
     await new Promise((resolve) =>
       setTimeout(resolve, 700)
