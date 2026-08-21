@@ -6,6 +6,7 @@
 
 Whether it's a trip with friends, shared rent, roommates, family expenses, or everyday group spending — HISSA helps users track who paid, who owes, and how everything should be settled.
 
+## hello 
  
 
 ## 🚀 Project Status
