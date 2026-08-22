@@ -8,6 +8,7 @@ import {
   Menu,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -19,18 +20,31 @@ const Navbar = () => {
   const profileRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
 
+  // =========================
+  // AUTH USER
+  // =========================
+
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+
+  // =========================
+  // CLOSE DROPDOWNS ON OUTSIDE CLICK
+  // =========================
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
       if (
         profileRef.current &&
-        !profileRef.current.contains(event.target as Node)
+        !profileRef.current.contains(target)
       ) {
         setProfileOpen(false);
       }
 
       if (
         notificationRef.current &&
-        !notificationRef.current.contains(event.target as Node)
+        !notificationRef.current.contains(target)
       ) {
         setNotificationOpen(false);
       }
@@ -39,82 +53,141 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
     };
   }, []);
 
+  // =========================
+  // MOBILE MENU
+  // =========================
+
   const handleMobileMenu = () => {
-    window.dispatchEvent(new CustomEvent("hissa:toggle-sidebar"));
+    window.dispatchEvent(
+      new CustomEvent("hissa:toggle-sidebar")
+    );
   };
+
+  // =========================
+  // USER INFO
+  // =========================
+
+  const userName = user?.name || "User";
+
+  const userEmail =
+    user?.email || "No email available";
+
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(/\s+/);
+
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return (
+      parts[0].charAt(0) +
+      parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+  };
+
+  const userInitials = getInitials(userName);
+
+  // =========================
+  // PAGE INFORMATION
+  // =========================
 
   const getPageInfo = () => {
     switch (location.pathname) {
       case "/dashboard":
       case "/":
         return {
-          title: "Welcome back, Saurabh 👋",
-          subtitle: "Here's what's happening with your expenses.",
+          title: `Welcome back, ${userName} 👋`,
+          subtitle:
+            "Here's what's happening with your expenses.",
         };
 
       case "/groups":
         return {
           title: "Groups",
-          subtitle: "Manage your groups and shared expenses.",
+          subtitle:
+            "Manage your groups and shared expenses.",
         };
 
       case "/expenses":
         return {
           title: "Expenses",
-          subtitle: "Track and manage all your expenses in one place.",
+          subtitle:
+            "Track and manage all your expenses in one place.",
         };
 
       case "/settlements":
         return {
           title: "Settlements",
-          subtitle: "Settle up and keep your balances clear.",
+          subtitle:
+            "Settle up and keep your balances clear.",
         };
 
       case "/reports":
         return {
           title: "Reports",
-          subtitle: "Understand your spending and expense activity.",
+          subtitle:
+            "Understand your spending and expense activity.",
         };
 
       case "/profile":
         return {
           title: "Profile",
-          subtitle: "Manage your personal information.",
+          subtitle:
+            "Manage your personal information.",
         };
 
       case "/settings":
         return {
           title: "Settings",
-          subtitle: "Manage your HISSA preferences.",
+          subtitle:
+            "Manage your HISSA preferences.",
         };
 
       default:
         return {
-          title: "Welcome back, Saurabh 👋",
-          subtitle: "Here's what's happening with your expenses.",
+          title: `Welcome back, ${userName} 👋`,
+          subtitle:
+            "Here's what's happening with your expenses.",
         };
     }
   };
 
   const pageInfo = getPageInfo();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  // =========================
+  // LOGOUT
+  // =========================
 
-    navigate("/login");
+  const handleLogout = () => {
+    setProfileOpen(false);
+    setNotificationOpen(false);
+
+    logout();
+
+    navigate("/login", {
+      replace: true,
+    });
   };
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/95 backdrop-blur">
       <div className="flex min-h-[72px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Left */}
+
+        {/* =========================
+            LEFT
+        ========================= */}
+
         <div className="flex min-w-0 items-center gap-3">
+
           {/* Mobile Menu */}
+
           <button
             type="button"
             onClick={handleMobileMenu}
@@ -128,6 +201,8 @@ const Navbar = () => {
             <Menu size={19} />
           </button>
 
+          {/* Page Title */}
+
           <div className="min-w-0">
             <h1 className="truncate text-[18px] font-bold tracking-tight text-slate-900 sm:text-[20px]">
               {pageInfo.title}
@@ -139,10 +214,20 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Right */}
+        {/* =========================
+            RIGHT
+        ========================= */}
+
         <div className="flex shrink-0 items-center gap-2 sm:gap-4">
-          {/* Notifications */}
-          <div ref={notificationRef} className="relative">
+
+          {/* =========================
+              NOTIFICATIONS
+          ========================= */}
+
+          <div
+            ref={notificationRef}
+            className="relative"
+          >
             <button
               type="button"
               onClick={() => {
@@ -156,17 +241,23 @@ const Navbar = () => {
               "
               aria-label="Notifications"
             >
-              <Bell size={19} strokeWidth={1.8} />
+              <Bell
+                size={19}
+                strokeWidth={1.8}
+              />
 
               {/* Notification dot */}
+
               <span className="absolute right-[9px] top-[8px] h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
             </button>
 
             {notificationOpen && (
-              <div className="
-                absolute right-0 top-12 w-[320px] overflow-hidden
-                rounded-xl border border-slate-200 bg-white shadow-xl
-              ">
+              <div
+                className="
+                  absolute right-0 top-12 w-[320px] overflow-hidden
+                  rounded-xl border border-slate-200 bg-white shadow-xl
+                "
+              >
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                   <h3 className="text-sm font-semibold text-slate-900">
                     Notifications
@@ -178,6 +269,9 @@ const Navbar = () => {
                 </div>
 
                 <div className="divide-y divide-slate-100">
+
+                  {/* Notification 1 */}
+
                   <div className="flex gap-3 px-4 py-3 hover:bg-slate-50">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                       <Bell size={15} />
@@ -187,11 +281,14 @@ const Navbar = () => {
                       <p className="text-xs font-medium text-slate-800">
                         New expense added
                       </p>
+
                       <p className="mt-0.5 text-[11px] text-slate-500">
                         Amit added an expense to Weekend Friends.
                       </p>
                     </div>
                   </div>
+
+                  {/* Notification 2 */}
 
                   <div className="flex gap-3 px-4 py-3 hover:bg-slate-50">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
@@ -202,6 +299,7 @@ const Navbar = () => {
                       <p className="text-xs font-medium text-slate-800">
                         Group invitation
                       </p>
+
                       <p className="mt-0.5 text-[11px] text-slate-500">
                         You have a new group invitation.
                       </p>
@@ -219,8 +317,14 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Profile */}
-          <div ref={profileRef} className="relative">
+          {/* =========================
+              PROFILE
+          ========================= */}
+
+          <div
+            ref={profileRef}
+            className="relative"
+          >
             <button
               type="button"
               onClick={() => {
@@ -232,19 +336,24 @@ const Navbar = () => {
                 transition hover:bg-slate-50
               "
             >
-              {/* Avatar */}
-              <div className="
-                flex h-9 w-9 items-center justify-center rounded-full
-                bg-gradient-to-br from-[#075e59] to-emerald-400
-                text-[11px] font-bold text-white shadow-sm
-              ">
-                SP
+
+              {/* Dynamic Avatar */}
+
+              <div
+                className="
+                  flex h-9 w-9 items-center justify-center rounded-full
+                  bg-gradient-to-br from-[#075e59] to-emerald-400
+                  text-[11px] font-bold text-white shadow-sm
+                "
+              >
+                {userInitials}
               </div>
 
-              {/* Name */}
+              {/* Dynamic Name */}
+
               <div className="hidden text-left sm:block">
-                <p className="text-[12px] font-semibold text-slate-800">
-                  Saurabh Pandey
+                <p className="max-w-[150px] truncate text-[12px] font-semibold text-slate-800">
+                  {userName}
                 </p>
               </div>
 
@@ -256,37 +365,54 @@ const Navbar = () => {
               />
             </button>
 
+            {/* Profile Dropdown */}
+
             {profileOpen && (
-              <div className="
-                absolute right-0 top-12 w-[210px]
-                overflow-hidden rounded-xl border border-slate-200
-                bg-white shadow-xl
-              ">
+              <div
+                className="
+                  absolute right-0 top-12 w-[240px]
+                  overflow-hidden rounded-xl border border-slate-200
+                  bg-white shadow-xl
+                "
+              >
+
                 {/* Profile Header */}
+
                 <div className="border-b border-slate-100 px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="
-                      flex h-10 w-10 items-center justify-center
-                      rounded-full bg-gradient-to-br from-[#075e59] to-emerald-400
-                      text-xs font-bold text-white
-                    ">
-                      SP
+
+                    {/* Avatar */}
+
+                    <div
+                      className="
+                        flex h-10 w-10 shrink-0 items-center justify-center
+                        rounded-full bg-gradient-to-br from-[#075e59] to-emerald-400
+                        text-xs font-bold text-white
+                      "
+                    >
+                      {userInitials}
                     </div>
+
+                    {/* User Details */}
 
                     <div className="min-w-0">
                       <p className="truncate text-xs font-semibold text-slate-900">
-                        Saurabh Pandey
+                        {userName}
                       </p>
 
                       <p className="truncate text-[10px] text-slate-500">
-                        saurabh@example.com
+                        {userEmail}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Menu */}
+
                 <div className="p-1.5">
+
+                  {/* Profile */}
+
                   <button
                     type="button"
                     onClick={() => {
@@ -302,6 +428,8 @@ const Navbar = () => {
                     <UserRound size={16} />
                     Profile
                   </button>
+
+                  {/* Settings */}
 
                   <button
                     type="button"
@@ -320,6 +448,8 @@ const Navbar = () => {
                   </button>
 
                   <div className="my-1 border-t border-slate-100" />
+
+                  {/* Logout */}
 
                   <button
                     type="button"
