@@ -12,29 +12,54 @@ import VerifyOTP from "./pages/auth/VerifyOTP";
 import ResetPassword from "./pages/auth/ResetPassword";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import Welcome from "./pages/auth/Welcome";
+
 import Dashboard from "./pages/Dashboard";
+
+import GuestRoute from "./components/auth/GuestRoute";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Default */}
+        {/* =========================
+            DEFAULT
+        ========================== */}
+
         <Route
           path="/"
-          element={<Navigate to="/login" replace />}
+          element={
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          }
         />
 
-        {/* Authentication */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        {/* =========================
+            GUEST ONLY
+            Logged-in user cannot
+            access these pages
+        ========================== */}
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route element={<GuestRoute />}>
+
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+
+        </Route>
+
+        {/* =========================
+            PUBLIC AUTH FLOWS
+        ========================== */}
 
         <Route
           path="/forgot-password"
@@ -56,22 +81,37 @@ export default function App() {
           element={<VerifyEmail />}
         />
 
-        {/* Onboarding */}
-        <Route
-          path="/welcome"
-          element={<Welcome />}
-        />
+        {/* =========================
+            PROTECTED ROUTES
+            Login required
+        ========================== */}
 
-        {/* Dashboard */}
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+        <Route element={<ProtectedRoute />}>
 
-        {/* Unknown URL */}
+          <Route
+            path="/welcome"
+            element={<Welcome />}
+          />
+
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+        </Route>
+
+        {/* =========================
+            UNKNOWN URL
+        ========================== */}
+
         <Route
           path="*"
-          element={<Navigate to="/login" replace />}
+          element={
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          }
         />
 
       </Routes>

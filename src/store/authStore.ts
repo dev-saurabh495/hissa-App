@@ -1,44 +1,156 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { AuthState } from "../types/auth";
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
+import type { AuthUser } from "../types/auth";
 
-      login: (user) =>
-        set({
-          user,
-          isAuthenticated: true,
-        }),
+interface AuthState {
+  user: AuthUser | null;
+  token: string | null;
+  isAuthenticated: boolean;
 
-      register: (user) =>
-        set({
-          user,
-          isAuthenticated: true,
-        }),
+  login: (
+    user: AuthUser,
+    token: string
+  ) => void;
 
-      logout: () =>
-        set({
-          user: null,
-          isAuthenticated: false,
-        }),
+  logout: () => void;
 
-      updateUser: (updates) =>
-        set((state) => ({
-          user: state.user
-            ? {
-                ...state.user,
-                ...updates,
-              }
-            : null,
-        })),
-    }),
-    {
-      name: "hissa-auth",
-    }
-  )
-);
+  setAuth: (
+    user: AuthUser,
+    token: string
+  ) => void;
+
+  clearAuth: () => void;
+}
+
+const storedToken =
+  localStorage.getItem("auth_token");
+
+const storedUser =
+  localStorage.getItem("auth_user");
+
+let parsedUser: AuthUser | null = null;
+
+try {
+  parsedUser = storedUser
+    ? JSON.parse(storedUser)
+    : null;
+} catch {
+  parsedUser = null;
+}
+
+export const useAuthStore =
+  create<AuthState>((set) => ({
+    /*
+     * =========================
+     * INITIAL STATE
+     * =========================
+     */
+
+    user: parsedUser,
+
+    token: storedToken,
+
+    isAuthenticated:
+      Boolean(
+        storedToken &&
+        parsedUser
+      ),
+
+    /*
+     * =========================
+     * LOGIN
+     * =========================
+     */
+
+    login: (
+      user,
+      token
+    ) => {
+      localStorage.setItem(
+        "auth_token",
+        token
+      );
+
+      localStorage.setItem(
+        "auth_user",
+        JSON.stringify(user)
+      );
+
+      set({
+        user,
+        token,
+        isAuthenticated: true,
+      });
+    },
+
+    /*
+     * =========================
+     * SET AUTH
+     * =========================
+     */
+
+    setAuth: (
+      user,
+      token
+    ) => {
+      localStorage.setItem(
+        "auth_token",
+        token
+      );
+
+      localStorage.setItem(
+        "auth_user",
+        JSON.stringify(user)
+      );
+
+      set({
+        user,
+        token,
+        isAuthenticated: true,
+      });
+    },
+
+    /*
+     * =========================
+     * LOGOUT
+     * =========================
+     */
+
+    logout: () => {
+      localStorage.removeItem(
+        "auth_token"
+      );
+
+      localStorage.removeItem(
+        "auth_user"
+      );
+
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      });
+    },
+
+    /*
+     * =========================
+     * CLEAR AUTH
+     * =========================
+     */
+
+    clearAuth: () => {
+      localStorage.removeItem(
+        "auth_token"
+      );
+
+      localStorage.removeItem(
+        "auth_user"
+      );
+
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      });
+    },
+  }));
