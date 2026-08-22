@@ -1,4 +1,8 @@
-import { ArrowRight, CheckCircle2, WalletCards } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  WalletCards,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
@@ -6,7 +10,7 @@ interface AuthLayoutProps {
   children: ReactNode;
   title: string;
   subtitle?: string;
-  showBack?: boolean;
+  logoLink?: string;
 }
 
 const features = [
@@ -19,15 +23,19 @@ export default function AuthLayout({
   children,
   title,
   subtitle,
+  logoLink = "/login",
 }: AuthLayoutProps) {
   return (
     <main className="auth-shell">
+      {/* =========================
+          BRAND PANEL
+      ========================== */}
       <section className="auth-brand-panel">
         <div className="brand-decoration brand-decoration-one" />
         <div className="brand-decoration brand-decoration-two" />
 
         <div className="brand-content">
-          <Link to="/login" className="brand-logo">
+          <Link to={logoLink} className="brand-logo">
             <span className="brand-logo-icon">
               <WalletCards size={24} />
             </span>
@@ -80,9 +88,12 @@ export default function AuthLayout({
         </div>
       </section>
 
+      {/* =========================
+          FORM PANEL
+      ========================== */}
       <section className="auth-form-panel">
         <div className="mobile-logo">
-          <Link to="/login" className="brand-logo">
+          <Link to={logoLink} className="brand-logo">
             <span className="brand-logo-icon">
               <WalletCards size={21} />
             </span>

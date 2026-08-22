@@ -174,9 +174,10 @@ export default function Register() {
 
   return (
     <AuthLayout
-      title="Create your account"
-      subtitle="Start keeping your shared expenses simple and transparent."
-    >
+  title="Create your account"
+  subtitle="Start managing your shared expenses."
+  logoLink="/register"
+>
       <form
         className="auth-form"
         onSubmit={handleSubmit(onSubmit)}

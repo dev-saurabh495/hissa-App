@@ -286,9 +286,10 @@ export default function Login() {
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to continue managing your shared expenses."
-    >
+  title="Welcome back"
+  subtitle="Login to continue to your Hissaab."
+  logoLink="/login"
+>
       <form
         className="auth-form"
         onSubmit={handleSubmit(
