@@ -1,43 +1,45 @@
-export interface User {
-  id: string;
+export interface AuthUser {
+  id: number;
+  uuid: string;
   name: string;
+  username: string;
   email: string;
-  phone?: string;
-  avatar?: string;
-  emailVerified: boolean;
+  phone: string | null;
+  avatar: string | null;
+  bio: string | null;
+  role: string;
+  status: string;
+  email_verified_at: string | null;
+  phone_verified_at: string | null;
+  last_login_at: string | null;
 }
 
-export interface LoginFormData {
+export interface LoginPayload {
   email: string;
   password: string;
   remember: boolean;
 }
 
-export interface RegisterFormData {
+export interface RegisterPayload {
   name: string;
+  username: string;
   email: string;
-  phone: string;
+  phone?: string;
   password: string;
-  confirmPassword: string;
-  terms: boolean;
+  password_confirmation: string;
 }
 
-export interface ForgotPasswordData {
-  email: string;
+export interface AuthResponse {
+  message: string;
+
+  data: {
+    user: AuthUser;
+    token: string;
+  };
 }
 
-export interface ResetPasswordData {
-  password: string;
-  confirmPassword: string;
-}
-
-export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-
-  login: (user: User) => void;
-  register: (user: User) => void;
-  logout: () => void;
-  updateUser: (user: Partial<User>) => void;
+export interface MeResponse {
+  data: {
+    user: AuthUser;
+  };
 }
