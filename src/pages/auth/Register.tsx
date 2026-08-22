@@ -82,7 +82,7 @@ export default function Register() {
     console.log("REQUEST PAYLOAD:", payload);
 
     const response = await fetch(
-      "http://127.0.0.1:8000/api/v1/auth/register",
+      "https://hissaab-backend.onrender.com/api/v1/auth/register",
       {
         method: "POST",
         headers: {
