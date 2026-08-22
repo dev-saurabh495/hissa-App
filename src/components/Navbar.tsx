@@ -8,7 +8,7 @@ import {
   Menu,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore";
+import { useAuthStore } from "../../src/store/authStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
