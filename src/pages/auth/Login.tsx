@@ -93,7 +93,7 @@ export default function Login() {
        * Laravel API request
        */
       const response = await fetch(
-          "https://hissaab-backend.onrender.com/api/auth/v1/login",
+          "https://hissaab-backend.onrender.com/api/v1/auth/login",
         {
           method: "POST",
 
