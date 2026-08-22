@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
               <div className="mt-6">
                 <Link
                   to="/groups/create"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gray px-5 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
                 >
                   <Plus size={18} />
                   Create your first group
