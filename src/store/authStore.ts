@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import type { AuthUser } from "../types/auth";
 
 interface AuthState {
@@ -20,6 +19,15 @@ interface AuthState {
   ) => void;
 
   clearAuth: () => void;
+
+  register: (
+    user: AuthUser,
+    token: string
+  ) => void;
+
+  updateUser: (
+    user: AuthUser
+  ) => void;
 }
 
 const storedToken =
@@ -40,7 +48,8 @@ try {
 
 export const useAuthStore =
   create<AuthState>((set) => ({
-    /*
+
+    /**
      * =========================
      * INITIAL STATE
      * =========================
@@ -56,7 +65,7 @@ export const useAuthStore =
         parsedUser
       ),
 
-    /*
+    /**
      * =========================
      * LOGIN
      * =========================
@@ -66,6 +75,7 @@ export const useAuthStore =
       user,
       token
     ) => {
+
       localStorage.setItem(
         "auth_token",
         token
@@ -83,7 +93,35 @@ export const useAuthStore =
       });
     },
 
-    /*
+    /**
+     * =========================
+     * REGISTER
+     * =========================
+     */
+
+    register: (
+      user,
+      token
+    ) => {
+
+      localStorage.setItem(
+        "auth_token",
+        token
+      );
+
+      localStorage.setItem(
+        "auth_user",
+        JSON.stringify(user)
+      );
+
+      set({
+        user,
+        token,
+        isAuthenticated: true,
+      });
+    },
+
+    /**
      * =========================
      * SET AUTH
      * =========================
@@ -93,6 +131,7 @@ export const useAuthStore =
       user,
       token
     ) => {
+
       localStorage.setItem(
         "auth_token",
         token
@@ -110,13 +149,34 @@ export const useAuthStore =
       });
     },
 
-    /*
+    /**
+     * =========================
+     * UPDATE USER
+     * =========================
+     */
+
+    updateUser: (
+      user
+    ) => {
+
+      localStorage.setItem(
+        "auth_user",
+        JSON.stringify(user)
+      );
+
+      set({
+        user,
+      });
+    },
+
+    /**
      * =========================
      * LOGOUT
      * =========================
      */
 
     logout: () => {
+
       localStorage.removeItem(
         "auth_token"
       );
@@ -132,13 +192,14 @@ export const useAuthStore =
       });
     },
 
-    /*
+    /**
      * =========================
      * CLEAR AUTH
      * =========================
      */
 
     clearAuth: () => {
+
       localStorage.removeItem(
         "auth_token"
       );
@@ -153,4 +214,5 @@ export const useAuthStore =
         isAuthenticated: false,
       });
     },
+
   }));

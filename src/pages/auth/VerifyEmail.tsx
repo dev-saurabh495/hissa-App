@@ -12,7 +12,10 @@ import { useAuthStore } from "../../store/authStore";
 export default function VerifyEmail() {
   const navigate = useNavigate();
 
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore(
+    (state) => state.user
+  );
+
   const updateUser = useAuthStore(
     (state) => state.updateUser
   );
@@ -22,8 +25,14 @@ export default function VerifyEmail() {
   };
 
   const handleContinue = () => {
+    if (!user) {
+      toast.error("User information not found.");
+      return;
+    }
+
     updateUser({
-      emailVerified: true,
+      ...user,
+      email_verified_at: new Date().toISOString(),
     });
 
     navigate("/welcome");
@@ -42,7 +51,7 @@ export default function VerifyEmail() {
         <h3>Check your email</h3>
 
         <p>
-          We've sent a verification link to
+          We've sent a verification link to{" "}
           <strong>
             {user?.email ?? "your email address"}
           </strong>

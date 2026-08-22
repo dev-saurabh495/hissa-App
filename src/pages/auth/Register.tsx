@@ -146,7 +146,10 @@ export default function Register() {
     );
 
     if (result.data?.user) {
-      registerUser(result.data.user);
+      registerUser(
+  result.data.user,
+  result.data.token
+);
     }
 
     toast.success(
