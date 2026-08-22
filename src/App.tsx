@@ -141,6 +141,10 @@ export default function App() {
           </Route>
         </Route>
 
+
+<Route element={<DashboardLayout />}>
+  <Route path="/dashboard" element={<Dashboard />} />
+</Route>
         {/* =========================
             UNKNOWN URL
         ========================== */}
